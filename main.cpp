@@ -4,11 +4,29 @@
 //endereço fisico = 0exFFFF
 //endereço virtual = 0vx0001
 
-std::string toVirtual(std::string endereco){
+std::vector<int> memoriaFisica(1024, -1);
+std::vector<int> memoriaVirtual(2048, -1);
+std::vector<int> TLB(10, -1);
+
+int checkTLB(int endereco){
+    for(int i=0; i<TLB.size()-1; i++){
+        if(TLB[i] == endereco){
+            std::cout << "endereco encontrado pela TLB.(hit)";nl
+            return TLB[i];
+        }
+    }
+
+    std::cout << "endereco não encontrado pela TLB.(miss)";nl
+    return -1;
+
+}
+
+
+int toVirtual(int endereco){
     
 }
 
-std::string toPhisic(std::string endereco){
+int toPhisic(int endereco){
 
 }
 
@@ -27,12 +45,13 @@ int main(){
 
     std::string prefixo = input.substr(0, 3);
     std::string endereco = input.substr(3);
+    int enderecoInt = std::stoi(endereco);
 
     if(prefixo == "0ex"){
-        std::string enderecoVirtual = toVirtual(endereco);
+        int enderecoVirtual = toVirtual(enderecoInt);
     }
     else if(prefixo == "0vx"){
-        std::string enderecoFisico = toPhisic(endereco);
+        int enderecoFisico = toPhisic(enderecoInt);
     }
     else{
         std::cout << "Endereco inválido.";nl
