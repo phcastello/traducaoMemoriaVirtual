@@ -147,6 +147,7 @@ std::string toVirtual(std::string endereco){
     if(outputTLB == "-1"){
         //traduz manualmente
         //grava na TLB
+        //retorna a tradução
     }
     else{
         return outputTLB;
@@ -159,6 +160,7 @@ std::string toPhisic(std::string endereco){
     if(outputTLB == "-1"){
         //traduz manualmente
         //grava na TLB
+        //retorna a tradução
     }
     else{
         return outputTLB;
@@ -183,12 +185,14 @@ int main(){
 
     std::string prefixo = input.substr(0, 3);
     std::string endereco = input.substr(3);
+    std::string enderecoVirtual;
+    std::string enderecoFisico;
 
     if(prefixo == "0ex"){
-        std::string enderecoVirtual = toVirtual(endereco);
+        enderecoVirtual = toVirtual(endereco);
     }
     else if(prefixo == "0vx"){
-        std::string enderecoFisico = toPhisic(endereco);
+        enderecoFisico = toPhisic(endereco);
     }
     else{
         std::cout << "Endereco invalido.";nl
