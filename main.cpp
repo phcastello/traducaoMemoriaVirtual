@@ -7,8 +7,8 @@
 
 // inicializados com -1 para indicar que não foram modificados
 typedef struct{
-    std::string tag; //virtual page number
-    std::string PPN; //physical page number
+    std::string tag = "-1"; //virtual page number
+    std::string PPN = "-1"; //physical page number
 } TLB;
 
 typedef struct{
@@ -105,47 +105,68 @@ std::string checkTLB(std::string endereco, char tipo){
     }
 
     std::cout << "endereco não encontrado pela TLB.(miss)";nl
-    return "-1"; //miss
+    return "-1"; // TLB miss
 
 }
 
 
 //terminar essa função
-int hasFreeSpaceTLB(){
+int hasFreePositionTLB(){
     //checar se tem espaço na TLB
     for(int i=0; i < itensTLB.size()-1; i++){
         if(itensTLB[i].tag == "-1"){
             return i;
         }
     }
-    return -1;
+    return -1; //sem espaço
 }
 
-//terminar essa função
 void TLBwrite(std::string tag, std::string enderecoFisico){
-    int posicao = hasFreeSpaceTLB();
-    if(posicao == -1){
-        std::cout << "TLB cheia, retirando item";nl
+    int posicao = hasFreePositionTLB();
+    if(posicao == -1){ //sem espaço
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<>dist(0,9);
+        int posicaoAleatoria = dist(gen);
+        std::cout << "TLB cheia, retirando item " << posicaoAleatoria;nl
+        itensTLB[posicaoAleatoria] = {tag, enderecoFisico};
+        std::cout << "tag nova: " << itensTLB[posicaoAleatoria].tag;nl
+        std::cout << "PPN nova: " << itensTLB[posicaoAleatoria].PPN;nl
+    }
+    else{
+        std::cout << "TLB cheia, retirando item " << posicao;nl
+        itensTLB[posicao] = {tag, enderecoFisico};
+        std::cout << "tag nova: " << itensTLB[posicao].tag;nl
+        std::cout << "PPN nova: " << itensTLB[posicao].PPN;nl
     }
 }
-
-
 
 //terminar essa função
 std::string toVirtual(std::string endereco){
     std::string outputTLB = checkTLB(endereco, 'V');
-
+    if(outputTLB == "-1"){
+        //traduz manualmente
+        //grava na TLB
+    }
+    else{
+        return outputTLB;
+    }
 }
 
 //terminar essa função
 std::string toPhisic(std::string endereco){
     std::string outputTLB = checkTLB(endereco, 'P');
-    
+    if(outputTLB == "-1"){
+        //traduz manualmente
+        //grava na TLB
+    }
+    else{
+        return outputTLB;
+    }
 }
 
-
 int main(){
-    std::cout << "Use 0ex ou 0vx para acessar memoria virtual ou fisica respectivamente.\n";nl
+    std::cout << "Use 0ex ou 0vx para traduzir memoria virtual ou fisica, respectivamente.\n";nl
     std::cout << "Traducao de enderecos fisico para virtual e vice-versa.\nDigite o endereco a ser traduzido: ";
     std::string input;
     std::cin >> input;
@@ -156,7 +177,7 @@ int main(){
     
 
     if (input.length() < 4) {
-        std::cout << "Endereco inválido.";nl
+        std::cout << "Endereco invalido.";nl
         return 1;
     }
 
@@ -170,7 +191,7 @@ int main(){
         std::string enderecoFisico = toPhisic(endereco);
     }
     else{
-        std::cout << "Endereco inválido.";nl
+        std::cout << "Endereco invalido.";nl
     }
 
 }
