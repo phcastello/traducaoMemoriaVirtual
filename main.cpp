@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
 #define nl std::cout<<"\n";
 
-//endereço fisico = 0exFFFF
-//endereço virtual = 0vx0001
+//endereço fisico = 0ex00FF
+//endereço virtual = 0vx000FF
 
 
 // inicializados com -1 para indicar que não foram modificados
@@ -11,82 +11,19 @@ typedef struct{
     std::string PPN = "-1"; //physical page number
 } TLB;
 
-typedef struct{
-    std::string PPN; //physical page number
-    int pageOffset;
-} enderecoFisico;
 
-typedef struct{
-    std::string VPN; //virtual page number
-    int pageOffset = -1;
-} enderecoVirtual;
+std::vector<TLB> itensTLB(1);
 
-std::vector<TLB> itensTLB(10);
+std::vector<std::string> enderecoFisico(256);
+std::vector<std::string> enderecoVirtual(4096);
 
-std::vector<enderecoFisico> itensFisico = {
-{"0000" "-1"},{"0001" "-1"},{"0002" "-1"},{"0003" "-1"},{"0004" "-1"},{"0005" "-1"},{"0006" "-1"},{"0007" "-1"},{"0008" "-1"},{"0009" "-1"},
-{"000a" "-1"},{"000b" "-1"},{"000c" "-1"},{"000d" "-1"},{"000e" "-1"},{"000f" "-1"},{"0010" "-1"},{"0011" "-1"},{"0012" "-1"},{"0013" "-1"},
-{"0014" "-1"},{"0015" "-1"},{"0016" "-1"},{"0017" "-1"},{"0018" "-1"},{"0019" "-1"},{"001a" "-1"},{"001b" "-1"},{"001c" "-1"},{"001d" "-1"},
-{"001e" "-1"},{"001f" "-1"},{"0020" "-1"},{"0021" "-1"},{"0022" "-1"},{"0023" "-1"},{"0024" "-1"},{"0025" "-1"},{"0026" "-1"},{"0027" "-1"},
-{"0028" "-1"},{"0029" "-1"},{"002a" "-1"},{"002b" "-1"},{"002c" "-1"},{"002d" "-1"},{"002e" "-1"},{"002f" "-1"},{"0030" "-1"},{"0031" "-1"},
-{"0032" "-1"},{"0033" "-1"},{"0034" "-1"},{"0035" "-1"},{"0036" "-1"},{"0037" "-1"},{"0038" "-1"},{"0039" "-1"},{"003a" "-1"},{"003b" "-1"},
-{"003c" "-1"},{"003d" "-1"},{"003e" "-1"},{"003f" "-1"},{"0040" "-1"},{"0041" "-1"},{"0042" "-1"},{"0043" "-1"},{"0044" "-1"},{"0045" "-1"},
-{"0046" "-1"},{"0047" "-1"},{"0048" "-1"},{"0049" "-1"},{"004a" "-1"},{"004b" "-1"},{"004c" "-1"},{"004d" "-1"},{"004e" "-1"},{"004f" "-1"},
-{"0050" "-1"},{"0051" "-1"},{"0052" "-1"},{"0053" "-1"},{"0054" "-1"},{"0055" "-1"},{"0056" "-1"},{"0057" "-1"},{"0058" "-1"},{"0059" "-1"},
-{"005a" "-1"},{"005b" "-1"},{"005c" "-1"},{"005d" "-1"},{"005e" "-1"},{"005f" "-1"},{"0060" "-1"},{"0061" "-1"},{"0062" "-1"},{"0063" "-1"},
-{"0064" "-1"},{"0065" "-1"},{"0066" "-1"},{"0067" "-1"},{"0068" "-1"},{"0069" "-1"},{"006a" "-1"},{"006b" "-1"},{"006c" "-1"},{"006d" "-1"},
-{"006e" "-1"},{"006f" "-1"},{"0070" "-1"},{"0071" "-1"},{"0072" "-1"},{"0073" "-1"},{"0074" "-1"},{"0075" "-1"},{"0076" "-1"},{"0077" "-1"},
-{"0078" "-1"},{"0079" "-1"},{"007a" "-1"},{"007b" "-1"},{"007c" "-1"},{"007d" "-1"},{"007e" "-1"},{"007f" "-1"},{"0080" "-1"},{"0081" "-1"},
-{"0082" "-1"},{"0083" "-1"},{"0084" "-1"},{"0085" "-1"},{"0086" "-1"},{"0087" "-1"},{"0088" "-1"},{"0089" "-1"},{"008a" "-1"},{"008b" "-1"},
-{"008c" "-1"},{"008d" "-1"},{"008e" "-1"},{"008f" "-1"},{"0090" "-1"},{"0091" "-1"},{"0092" "-1"},{"0093" "-1"},{"0094" "-1"},{"0095" "-1"},
-{"0096" "-1"},{"0097" "-1"},{"0098" "-1"},{"0099" "-1"},{"009a" "-1"},{"009b" "-1"},{"009c" "-1"},{"009d" "-1"},{"009e" "-1"},{"009f" "-1"},
-{"00a0" "-1"},{"00a1" "-1"},{"00a2" "-1"},{"00a3" "-1"},{"00a4" "-1"},{"00a5" "-1"},{"00a6" "-1"},{"00a7" "-1"},{"00a8" "-1"},{"00a9" "-1"},
-{"00aa" "-1"},{"00ab" "-1"},{"00ac" "-1"},{"00ad" "-1"},{"00ae" "-1"},{"00af" "-1"},{"00b0" "-1"},{"00b1" "-1"},{"00b2" "-1"},{"00b3" "-1"},
-{"00b4" "-1"},{"00b5" "-1"},{"00b6" "-1"},{"00b7" "-1"},{"00b8" "-1"},{"00b9" "-1"},{"00ba" "-1"},{"00bb" "-1"},{"00bc" "-1"},{"00bd" "-1"},
-{"00be" "-1"},{"00bf" "-1"},{"00c0" "-1"},{"00c1" "-1"},{"00c2" "-1"},{"00c3" "-1"},{"00c4" "-1"},{"00c5" "-1"},{"00c6" "-1"},{"00c7" "-1"},
-{"00c8" "-1"},{"00c9" "-1"},{"00ca" "-1"},{"00cb" "-1"},{"00cc" "-1"},{"00cd" "-1"},{"00ce" "-1"},{"00cf" "-1"},{"00d0" "-1"},{"00d1" "-1"},
-{"00d2" "-1"},{"00d3" "-1"},{"00d4" "-1"},{"00d5" "-1"},{"00d6" "-1"},{"00d7" "-1"},{"00d8" "-1"},{"00d9" "-1"},{"00da" "-1"},{"00db" "-1"},
-{"00dc" "-1"},{"00dd" "-1"},{"00de" "-1"},{"00df" "-1"},{"00e0" "-1"},{"00e1" "-1"},{"00e2" "-1"},{"00e3" "-1"},{"00e4" "-1"},{"00e5" "-1"},
-{"00e6" "-1"},{"00e7" "-1"},{"00e8" "-1"},{"00e9" "-1"},{"00ea" "-1"},{"00eb" "-1"},{"00ec" "-1"},{"00ed" "-1"},{"00ee" "-1"},{"00ef" "-1"},
-{"00f0" "-1"},{"00f1" "-1"},{"00f2" "-1"},{"00f3" "-1"},{"00f4" "-1"},{"00f5" "-1"},{"00f6" "-1"},{"00f7" "-1"},{"00f8" "-1"},{"00f9" "-1"},
-{"00fa" "-1"},{"00fb" "-1"},{"00fc" "-1"},{"00fd" "-1"},{"00fe" "-1"},{"00ff" "-1"}
-};
-
-std::vector<enderecoVirtual> itensVirtual{
-{"00000" "-1"},{"00001" "-1"},{"00002" "-1"},{"00003" "-1"},{"00004" "-1"},{"00005" "-1"},{"00006" "-1"},{"00007" "-1"},{"00008" "-1"},{"00009" "-1"},
-{"0000a" "-1"},{"0000b" "-1"},{"0000c" "-1"},{"0000d" "-1"},{"0000e" "-1"},{"0000f" "-1"},{"00010" "-1"},{"00011" "-1"},{"00012" "-1"},{"00013" "-1"},
-{"00014" "-1"},{"00015" "-1"},{"00016" "-1"},{"00017" "-1"},{"00018" "-1"},{"00019" "-1"},{"0001a" "-1"},{"0001b" "-1"},{"0001c" "-1"},{"0001d" "-1"},
-{"0001e" "-1"},{"0001f" "-1"},{"00020" "-1"},{"00021" "-1"},{"00022" "-1"},{"00023" "-1"},{"00024" "-1"},{"00025" "-1"},{"00026" "-1"},{"00027" "-1"},
-{"00028" "-1"},{"00029" "-1"},{"0002a" "-1"},{"0002b" "-1"},{"0002c" "-1"},{"0002d" "-1"},{"0002e" "-1"},{"0002f" "-1"},{"00030" "-1"},{"00031" "-1"},
-{"00032" "-1"},{"00033" "-1"},{"00034" "-1"},{"00035" "-1"},{"00036" "-1"},{"00037" "-1"},{"00038" "-1"},{"00039" "-1"},{"0003a" "-1"},{"0003b" "-1"},
-{"0003c" "-1"},{"0003d" "-1"},{"0003e" "-1"},{"0003f" "-1"},{"00040" "-1"},{"00041" "-1"},{"00042" "-1"},{"00043" "-1"},{"00044" "-1"},{"00045" "-1"},
-{"00046" "-1"},{"00047" "-1"},{"00048" "-1"},{"00049" "-1"},{"0004a" "-1"},{"0004b" "-1"},{"0004c" "-1"},{"0004d" "-1"},{"0004e" "-1"},{"0004f" "-1"},
-{"00050" "-1"},{"00051" "-1"},{"00052" "-1"},{"00053" "-1"},{"00054" "-1"},{"00055" "-1"},{"00056" "-1"},{"00057" "-1"},{"00058" "-1"},{"00059" "-1"},
-{"0005a" "-1"},{"0005b" "-1"},{"0005c" "-1"},{"0005d" "-1"},{"0005e" "-1"},{"0005f" "-1"},{"00060" "-1"},{"00061" "-1"},{"00062" "-1"},{"00063" "-1"},
-{"00064" "-1"},{"00065" "-1"},{"00066" "-1"},{"00067" "-1"},{"00068" "-1"},{"00069" "-1"},{"0006a" "-1"},{"0006b" "-1"},{"0006c" "-1"},{"0006d" "-1"},
-{"0006e" "-1"},{"0006f" "-1"},{"00070" "-1"},{"00071" "-1"},{"00072" "-1"},{"00073" "-1"},{"00074" "-1"},{"00075" "-1"},{"00076" "-1"},{"00077" "-1"},
-{"00078" "-1"},{"00079" "-1"},{"0007a" "-1"},{"0007b" "-1"},{"0007c" "-1"},{"0007d" "-1"},{"0007e" "-1"},{"0007f" "-1"},{"00080" "-1"},{"00081" "-1"},
-{"00082" "-1"},{"00083" "-1"},{"00084" "-1"},{"00085" "-1"},{"00086" "-1"},{"00087" "-1"},{"00088" "-1"},{"00089" "-1"},{"0008a" "-1"},{"0008b" "-1"},
-{"0008c" "-1"},{"0008d" "-1"},{"0008e" "-1"},{"0008f" "-1"},{"00090" "-1"},{"00091" "-1"},{"00092" "-1"},{"00093" "-1"},{"00094" "-1"},{"00095" "-1"},
-{"00096" "-1"},{"00097" "-1"},{"00098" "-1"},{"00099" "-1"},{"0009a" "-1"},{"0009b" "-1"},{"0009c" "-1"},{"0009d" "-1"},{"0009e" "-1"},{"0009f" "-1"},
-{"000a0" "-1"},{"000a1" "-1"},{"000a2" "-1"},{"000a3" "-1"},{"000a4" "-1"},{"000a5" "-1"},{"000a6" "-1"},{"000a7" "-1"},{"000a8" "-1"},{"000a9" "-1"},
-{"000aa" "-1"},{"000ab" "-1"},{"000ac" "-1"},{"000ad" "-1"},{"000ae" "-1"},{"000af" "-1"},{"000b0" "-1"},{"000b1" "-1"},{"000b2" "-1"},{"000b3" "-1"},
-{"000b4" "-1"},{"000b5" "-1"},{"000b6" "-1"},{"000b7" "-1"},{"000b8" "-1"},{"000b9" "-1"},{"000ba" "-1"},{"000bb" "-1"},{"000bc" "-1"},{"000bd" "-1"},
-{"000be" "-1"},{"000bf" "-1"},{"000c0" "-1"},{"000c1" "-1"},{"000c2" "-1"},{"000c3" "-1"},{"000c4" "-1"},{"000c5" "-1"},{"000c6" "-1"},{"000c7" "-1"},
-{"000c8" "-1"},{"000c9" "-1"},{"000ca" "-1"},{"000cb" "-1"},{"000cc" "-1"},{"000cd" "-1"},{"000ce" "-1"},{"000cf" "-1"},{"000d0" "-1"},{"000d1" "-1"},
-{"000d2" "-1"},{"000d3" "-1"},{"000d4" "-1"},{"000d5" "-1"},{"000d6" "-1"},{"000d7" "-1"},{"000d8" "-1"},{"000d9" "-1"},{"000da" "-1"},{"000db" "-1"},
-{"000dc" "-1"},{"000dd" "-1"},{"000de" "-1"},{"000df" "-1"},{"000e0" "-1"},{"000e1" "-1"},{"000e2" "-1"},{"000e3" "-1"},{"000e4" "-1"},{"000e5" "-1"},
-{"000e6" "-1"},{"000e7" "-1"},{"000e8" "-1"},{"000e9" "-1"},{"000ea" "-1"},{"000eb" "-1"},{"000ec" "-1"},{"000ed" "-1"},{"000ee" "-1"},{"000ef" "-1"},
-{"000f0" "-1"},{"000f1" "-1"},{"000f2" "-1"},{"000f3" "-1"},{"000f4" "-1"},{"000f5" "-1"},{"000f6" "-1"},{"000f7" "-1"},{"000f8" "-1"},{"000f9" "-1"},
-{"000fa" "-1"},{"000fb" "-1"},{"000fc" "-1"},{"000fd" "-1"},{"000fe" "-1"},{"000ff" "-1"}
-};
 
 std::string checkTLB(std::string endereco, char tipo){
     tipo = toupper(tipo);
 
     //para virtual
     if(tipo == 'V'){
-        for(int i=0; i<itensTLB.size()-1; i++){
+        for(int i=0; i<itensTLB.size(); i++){
             if(itensTLB[i].PPN == endereco){
                 std::cout << "endereco encontrado pela TLB.(hit)";nl
                 return itensTLB[i].tag;
@@ -96,7 +33,7 @@ std::string checkTLB(std::string endereco, char tipo){
     
     //para fisico
     else if(tipo == 'P'){
-        for(int i=0; i<itensTLB.size()-1; i++){
+        for(int i=0; i<itensTLB.size(); i++){
             if(itensTLB[i].tag == endereco){
                 std::cout << "endereco encontrado pela TLB.(hit)";nl
                 return itensTLB[i].PPN;
@@ -109,11 +46,9 @@ std::string checkTLB(std::string endereco, char tipo){
 
 }
 
-
-//terminar essa função
-int hasFreePositionTLB(){
+int freePositionTLB(){
     //checar se tem espaço na TLB
-    for(int i=0; i < itensTLB.size()-1; i++){
+    for(int i=0; i < itensTLB.size(); i++){
         if(itensTLB[i].tag == "-1"){
             return i;
         }
@@ -122,7 +57,7 @@ int hasFreePositionTLB(){
 }
 
 void TLBwrite(std::string tag, std::string enderecoFisico){
-    int posicao = hasFreePositionTLB();
+    int posicao = freePositionTLB(); 
     if(posicao == -1){ //sem espaço
         std::random_device rd;
         std::mt19937 gen(rd());
@@ -134,7 +69,7 @@ void TLBwrite(std::string tag, std::string enderecoFisico){
         std::cout << "PPN nova: " << itensTLB[posicaoAleatoria].PPN;nl
     }
     else{
-        std::cout << "TLB cheia, retirando item " << posicao;nl
+        std::cout << "Gravado na posicao " << posicao << " da TLB.";nl
         itensTLB[posicao] = {tag, enderecoFisico};
         std::cout << "tag nova: " << itensTLB[posicao].tag;nl
         std::cout << "PPN nova: " << itensTLB[posicao].PPN;nl
@@ -143,11 +78,27 @@ void TLBwrite(std::string tag, std::string enderecoFisico){
 
 //terminar essa função
 std::string toVirtual(std::string endereco){
-    std::string outputTLB = checkTLB(endereco, 'V');
+    std::string pagina = endereco.substr(0,4);//0003204
+    std::cout << "endereco em toVirtual: " << endereco;nl
+    std::cout << "pagina em toVirtual: " << pagina;nl
+    std::string outputTLB = checkTLB(pagina, 'V');
     if(outputTLB == "-1"){
+        std::cout << "Traduzindo manualmente o endereço físico para virtual...";nl
         //traduz manualmente
-        //grava na TLB
-        //retorna a tradução
+        int paginaInt = std::stoi(pagina, nullptr, 16);
+        std::cout << "paginaInt: " << paginaInt;nl
+        if(paginaInt < enderecoVirtual.size() and paginaInt > 0){
+            std::string novoEnderecoVirtual = "0" + enderecoFisico[paginaInt];
+            // Atualiza a TLB
+            std::string novaPagina = "0" + pagina;
+            TLBwrite(novoEnderecoVirtual, novaPagina);//grava na TLB
+            std::cout << "Endereco gravado na TLB.";nl
+            return novoEnderecoVirtual;//retorna a tradução
+        }
+        else{
+            std::cout << "Endereço virtual não encontrado.";nl
+            return "-1"; // Não foi possível traduzir
+        }
     }
     else{
         return outputTLB;
@@ -156,11 +107,26 @@ std::string toVirtual(std::string endereco){
 
 //terminar essa função
 std::string toPhisic(std::string endereco){
-    std::string outputTLB = checkTLB(endereco, 'P');
+    std::string pagina = endereco.substr(0,5);//00003204
+    std::cout << "endereco em toPhisic: " << endereco;nl
+    std::cout << "pagina em toPhisic: " << pagina;nl
+    std::string outputTLB = checkTLB(pagina, 'P');
     if(outputTLB == "-1"){
+        std::cout << "Traduzindo manualmente o endereço virtual para físico...";nl
         //traduz manualmente
-        //grava na TLB
-        //retorna a tradução
+        int paginaInt = std::stoi(pagina);
+        std::cout << "paginaInt: " << paginaInt;nl
+        if(paginaInt < enderecoFisico.size() and paginaInt > 0){
+            std::string novoEnderecoFisico = enderecoFisico[paginaInt];
+            // Atualiza a TLB
+            TLBwrite(pagina, novoEnderecoFisico);//grava na TLB
+            std::cout << "Endereco gravado na TLB.";nl
+            return novoEnderecoFisico;//retorna a tradução
+        }
+        else{
+            std::cout << "Endereço virtual não encontrado.";nl
+            return "-1"; // Não foi possível traduzir
+        }
     }
     else{
         return outputTLB;
@@ -168,34 +134,63 @@ std::string toPhisic(std::string endereco){
 }
 
 int main(){
-    std::cout << "Use 0ex ou 0vx para traduzir memoria virtual ou fisica, respectivamente.\n";nl
-    std::cout << "Traducao de enderecos fisico para virtual e vice-versa.\nDigite o endereco a ser traduzido: ";
-    std::string input;
-    std::cin >> input;
-    //input = 0vx00003204
-    //prefixo = 0vx
-    //pagina = 00003
-    //offset = 204
+    //inicializar vetor enderecoVirtual
+    for (int i = 0x00100; i <= 0x00FFF; i++){
+        std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(5) << i;
+        enderecoVirtual[i] = ss.str();
+    }
+
+    //inicializar vetor enderecoFisico
+    for (int i = 0x0000; i <= 0x00FF; i++){
+        std::stringstream ss;
+        ss << std::hex << std::setfill('0') << std::setw(4) << i;
+        enderecoFisico[i] = ss.str();
+    }
     
-
-    if (input.length() < 4) {
-        std::cout << "Endereco invalido.";nl
-        return 1;
-    }
-
-    std::string prefixo = input.substr(0, 3);
-    std::string endereco = input.substr(3);
-    std::string enderecoVirtual;
-    std::string enderecoFisico;
-
-    if(prefixo == "0ex"){
-        enderecoVirtual = toVirtual(endereco);
-    }
-    else if(prefixo == "0vx"){
-        enderecoFisico = toPhisic(endereco);
-    }
-    else{
-        std::cout << "Endereco invalido.";nl
-    }
-
+    std::string input;
+    do{
+        std::cout << "---------------------------------------------------------------------------------------------------";nl
+        std::cout << "Traducao de enderecos fisico para virtual e vice-versa.";nl
+        std::cout << "Use 0ex = memoria fisica, 0vx = memoria virtual. Digite \"exit\" para sair.";nl
+        std::cout << "Digite o endereco a ser traduzido: ";
+        std::cin >> input;
+        //input = 0vx00003204
+        //prefixo = 0vx
+        //pagina = 00003
+        //offset = 204
+        
+        std::string prefixo = input.substr(0, 3);
+        std::string endereco = input.substr(3);
+        std::string paginaVirtual;
+        std::string paginaFisica;
+    
+        if (input.length() < 4) {
+            prefixo = "-1";
+        }
+    
+        if(prefixo == "0ex"){
+            std::string offset = endereco.substr(4);
+            std::cout << "offset: " << offset;nl
+            paginaVirtual = toVirtual(endereco);
+            if(paginaVirtual != "-1"){
+                std::cout << "Endereco fisico original: " << input;nl
+                std::cout << "Endereco traduzido para virtual: " << "0vx" << paginaVirtual << offset;nl
+            }
+        }
+        else if(prefixo == "0vx"){
+            std::string offset = endereco.substr(5); //0vx00003204
+            std::cout << "offset: " << offset;nl
+            paginaFisica = toPhisic(endereco);
+            if(paginaFisica != "-1"){
+                std::cout << "Endereco virtual original: " << input;nl
+                std::cout << "Endereco traduzido para fisico: " << "0ex" << paginaFisica<< offset;nl
+            }
+        }
+        else{
+            std::cout << "Endereco invalido.";nl
+        }
+    }while(input != "exit");
+    
+    return 0;
 }
