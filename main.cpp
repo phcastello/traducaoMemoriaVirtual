@@ -171,7 +171,11 @@ int main(){
     
         if(prefixo == "0ex"){
             std::string offset = endereco.substr(4);
-            std::cout << "offset: " << offset;nl
+            int paginaInt = std::stoi(endereco.substr(0,4), nullptr, 16);
+            if(paginaInt > enderecoFisico.size()){
+                std::cout << "Endereco fisico fora dos limites.";nl
+                goto saida;
+            }
             paginaVirtual = toVirtual(endereco);
             if(paginaVirtual != "-1"){
                 std::cout << "Endereco fisico original: " << input;nl
@@ -190,6 +194,7 @@ int main(){
         else{
             std::cout << "Endereco invalido.";nl
         }
+        saida:
     }while(input != "exit");
     
     return 0;
